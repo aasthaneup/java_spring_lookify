@@ -23,39 +23,31 @@ public class Song {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
 	@NotNull
 	@Size(min=5)
 	private String title;
-	
 	@NotNull
 	@Size(min=5)
 	private String artist;
-	
 	@NotNull
 	@Min(1)
 	@Max(10)
 	private Integer rating;
-
+	@Column(updatable=false)
+	@DateTimeFormat(pattern="yy-MM-dd")
+	private Date createdAt;
+	@DateTimeFormat(pattern="yy-MM-dd")
+	private Date updatedAt;
+//	default and parameterized constructors
 	public Song() {
-		
 	}
-	
 	public Song(String title, String artist,
 			Integer rating) {
 		this.title = title;
 		this.artist = artist;
 		this.rating = rating;
 	}
-	
-	
-	@Column(updatable=false)
-	@DateTimeFormat(pattern="yy-MM-dd")
-	private Date createdAt;
-	
-	@DateTimeFormat(pattern="yy-MM-dd")
-	private Date updatedAt;
-	
+//	pre and post persist methods
 	@PrePersist
 	protected void onCreate() {
 		this.createdAt = new Date();
@@ -64,6 +56,7 @@ public class Song {
 	protected void onUpdate() {
 		this.updatedAt = new Date();
 	}
+//	getters and setters
 	public Long getId() {
 		return id;
 	}
