@@ -16,37 +16,34 @@ import com.assignment.lookify.services.SongService;
 
 @Controller
 public class LookifyController {
-
 	private final SongService songService;
-	
 	public LookifyController(SongService songService) {
 		this.songService = songService;
 	}
-	
+//	home/landing page
 	@RequestMapping("/")
 	public String index() {
 		return "home.jsp";
 	}
-	
+//	dashboard page: shows all songs
 	@RequestMapping("/dashboard")
 	public String dashboard(Model model) {
 		model.addAttribute("songs", songService.allSongs());
 		return "dashboard.jsp";
 	}
-	
+//	show one song
 	@RequestMapping("/songs/{id}")
 	public String detail(@PathVariable("id") Long id, Model model) {
 		model.addAttribute("song", songService.findSong(id));
 		return "/view.jsp";
 	}
-	
-	
+//	new song page
 	@RequestMapping("/songs/new")
 	public String add(Model model) {
 		model.addAttribute("song", new Song());
 		return "new.jsp";
 	}
-	
+//	add a new song
 	@RequestMapping(value="/songs/new", method=RequestMethod.POST)
 	public String newSong(@Valid @ModelAttribute("song") Song song, BindingResult result) {
 		if(result.hasErrors()) {
@@ -57,23 +54,20 @@ public class LookifyController {
 			return "redirect:/dashboard";
 		}
 	}
-	
-//	search by artist:
+//	search by artist
 	@RequestMapping(value="/search", method=RequestMethod.POST)
 	public String search(@RequestParam(value="artist", required=false) String artist, Model model) {
 		model.addAttribute("artistSongs", songService.listSongsByArtist(artist));
 		model.addAttribute("artist", artist);
 		return "artistsongs.jsp";
 	}
-	
-//	Top 10 songs:
+//	Top 10 songs
 	@RequestMapping("/topten")
 	public String topten(Model model){
 		model.addAttribute("songs", songService.topTenSongs());
 		return "topten.jsp";
 	}
-	
-//  delete method
+//  delete a song
 	@RequestMapping(value="/songs/{id}", method=RequestMethod.DELETE)
 	public String destroy(@PathVariable("id") Long id) {
 		songService.deleteSong(id);
