@@ -47,7 +47,7 @@ public class Song {
 		this.artist = artist;
 		this.rating = rating;
 	}
-//	pre and post persist methods
+//	prePersist  and preUpdate methods
 	@PrePersist
 	protected void onCreate() {
 		this.createdAt = new Date();
